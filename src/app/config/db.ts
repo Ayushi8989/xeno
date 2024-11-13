@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
-import { DB_NAME } from '../constants';
+import { DB_NAME } from '../constants.ts';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const connectDB = async () => {
   try {
@@ -7,7 +10,7 @@ const connectDB = async () => {
       `${process.env.MONGODB_URI}/${DB_NAME}`
     );
     console.log(
-      `\n MongoDB Connected \n HOST: ${connectionInstance.connection.host} `
+      `\n MongoDB Connected! \n HOST: ${connectionInstance.connection.host} `
     );
   } catch (error) {
     console.log("mongodb-uri: ", process.env.MONGODB_URI)
