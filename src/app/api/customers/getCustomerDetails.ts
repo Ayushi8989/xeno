@@ -1,4 +1,4 @@
-import Customer from '../../config/mongoSchemas/customer.model.ts'; 
+import Customer from '../../models/customer.model.ts'; 
 
 import { Request, Response } from 'express';
 

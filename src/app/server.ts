@@ -1,9 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 
-import connectDB from './config/db.ts'; 
+import connectDB from './config/dbConfig.ts'; 
 import customerRoutes from './routes/customer.routes.ts';
 import orderRoutes from './routes/order.routes.ts';
+import subscribeToCustomerEvents from './api/subscribers/customerSubscriber.ts';
+import subscribeToOrderEvents from './api/subscribers/orderSubscriber.ts';
 
 dotenv.config();
 
@@ -14,6 +16,9 @@ app.use(express.json()); // For parsing JSON requests
 
 // Connect to Database
 connectDB(); 
+
+subscribeToCustomerEvents();
+subscribeToOrderEvents();
 
 // Define routes
 app.use(customerRoutes); 

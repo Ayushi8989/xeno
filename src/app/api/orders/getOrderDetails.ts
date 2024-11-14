@@ -1,4 +1,4 @@
-import Order from '../../config/mongoSchemas/order.model.ts';
+import Order from '../../models/order.model.ts';
 
 import { Request, Response } from 'express';
 

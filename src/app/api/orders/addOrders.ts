@@ -1,6 +1,6 @@
-import Customer from '../../config/mongoSchemas/customer.model.ts';
-import Order from '../../config/mongoSchemas/order.model.ts';
-
+import redisClient from '../../config/redisClient.ts';
+import Customer from '../../models/customer.model.ts';
+import Order from '../../models/order.model.ts';
 import { Request, Response } from 'express';
 
 // To add new Orders
@@ -29,6 +29,15 @@ export const addOrders = async (req: Request, res: Response): Promise<void> => {
         });
 
         const savedOrder = await newOrder.save();
+
+        redisClient.on('ready', async () => {
+            try {
+                await redisClient.publish('order.added', JSON.stringify(savedOrder));
+                console.log('Published order.added event');
+            } catch (error) {
+                console.error('Error publishing to Redis:', error);
+            }
+        });
 
         res.status(201).json({
             message: 'Order created successfully',
