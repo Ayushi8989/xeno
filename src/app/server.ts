@@ -1,6 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
+
 import connectDB from './config/db.ts'; 
+import customerRoutes from './routes/customer.routes.ts';
+import orderRoutes from './routes/order.routes.ts';
 
 dotenv.config();
 
@@ -13,7 +16,8 @@ app.use(express.json()); // For parsing JSON requests
 connectDB(); 
 
 // Define routes
-// app.use('/api', require('./routes/api'));
+app.use(customerRoutes); 
+app.use(orderRoutes)
 
 // Start the server
 const PORT = process.env.PORT || 5000;
