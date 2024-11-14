@@ -1,7 +1,6 @@
-import redisClient from '../../config/redisClient.ts';
-import Customer from '../../models/customer.model.ts';
-import Order from '../../models/order.model.ts';
 import { Request, Response } from 'express';
+import { publisherClient } from '../../config/redisClient.ts';
+import Customer from '../../models/customer.model.ts';
 
 // To add new Orders
 export const addOrders = async (req: Request, res: Response): Promise<void> => {
@@ -19,31 +18,26 @@ export const addOrders = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const newOrder = new Order({
+        const orderData = {
             orderNumber,
             customerId,
             items,
             totalAmount,
             orderDate: new Date(),
-            status: 'Pending', 
-        });
+            status: 'Pending',
+        };
 
-        const savedOrder = await newOrder.save();
-
-        redisClient.on('ready', async () => {
-            try {
-                await redisClient.publish('order.added', JSON.stringify(savedOrder));
-                console.log('Published order.added event');
-            } catch (error) {
-                console.error('Error publishing to Redis:', error);
-            }
-        });
-
-        res.status(201).json({
-            message: 'Order created successfully',
-            order: savedOrder,
-        });
-
+        try {
+            await publisherClient.publish('order.added', JSON.stringify(orderData));
+            console.log('Published order.added event');
+            res.status(201).json({
+                message: 'Order published successfully',
+                order: orderData,
+            });
+        } catch (error) {
+            console.error('Error publishing to Redis:', error);
+            res.status(500).json({ message: 'Error publishing to Redis' });
+        }
     } catch (error) {
         console.error('Error in addOrders controller:', error);
         res.status(500).json({ message: 'Internal Server Error' });

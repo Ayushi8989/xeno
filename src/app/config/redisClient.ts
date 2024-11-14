@@ -1,16 +1,20 @@
 import { createClient } from 'redis';
 
-const redisClient = createClient({
+const subscriberClient = createClient({
+    url: process.env.REDIS_URL || 'redis://localhost:6380', 
+});
+const publisherClient = createClient({
     url: process.env.REDIS_URL || 'redis://localhost:6380',
 });
 
-redisClient.on('error', (err) => console.error('Redis Client Error', err));
+subscriberClient.on('error', (err) => console.error('Subscriber Client Error', err));
+publisherClient.on('error', (err) => console.error('Publisher Client Error', err));
 
 (async () => {
-    await redisClient.connect();
-    console.log(
-        `\n Redis Connected! \n `
-      );
+    await subscriberClient.connect();
+    await publisherClient.connect();
+    console.log('\nRedis Clients (Subscriber and Publisher) Connected!\n');
 })();
 
-export default redisClient;
+export { subscriberClient, publisherClient };
+

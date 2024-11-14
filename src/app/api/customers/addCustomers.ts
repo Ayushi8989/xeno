@@ -1,29 +1,24 @@
-import redisClient from '../../config/redisClient.ts';
-import Customer from '../../models/customer.model.ts';
-
+import { publisherClient } from '../../config/redisClient.ts';
 import { Request, Response } from 'express';
 
 // To add new Customer
 export const addCustomers = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, email, phone, address } = req.body; 
+        const { name, email, phone, address } = req.body;
 
-        const newCustomer = new Customer({ name, email, phone, address });
-        // TODO: Handle this in consumer
-        const savedCustomer = await newCustomer.save();
+        if (!name || !email || !phone || !address) {
+            res.status(400).json({ message: 'Missing required fields' });
+            return;
+        }
 
-        redisClient.on('ready', async () => {
-            try {
-                await redisClient.publish('customer.added', JSON.stringify(savedCustomer));
-                console.log('Published customer.added event');
-            } catch (error) {
-                console.error('Error publishing to Redis:', error);
-            }
-        });
+        const customerData = { name, email, phone, address };
 
-        res.status(201).json(savedCustomer);
+        await publisherClient.publish('customer.added', JSON.stringify(customerData));
+        console.log('Published customer.added event');
+
+        res.status(202).json({ message: 'Customer data published successfully' });
     } catch (error) {
         console.error('Error in addCustomers controller:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
-}
+};
