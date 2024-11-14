@@ -7,6 +7,7 @@ import orderRoutes from './routes/order.routes.ts';
 import subscribeToCustomerEvents from './api/subscribers/customerSubscriber.ts';
 import subscribeToOrderEvents from './api/subscribers/orderSubscriber.ts';
 import segmentRoutes from './routes/segment.routes.ts';
+import campaignRoutes from './routes/campaign.routes.ts';
 
 dotenv.config();
 
@@ -23,8 +24,9 @@ subscribeToOrderEvents();
 
 // Define routes
 app.use(customerRoutes); 
-app.use(orderRoutes)
-app.use(segmentRoutes)
+app.use(orderRoutes);
+app.use(segmentRoutes);
+app.use(campaignRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

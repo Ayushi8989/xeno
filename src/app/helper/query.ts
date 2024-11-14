@@ -36,6 +36,7 @@ export const buildQuery = async (criteria: SegmentationCriteria) => {
         }
     }
 
+    // how the visits are recorded ideally?
     if (criteria.visits) {
         query.visits = { $lte: criteria.visits };
     }
