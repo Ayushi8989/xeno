@@ -1,5 +1,5 @@
 // import Customer from '../../app/models/customer.model.ts';  
-import Order from '../../app/models/order.model.ts';
+import Order from '../models/order.model.ts';
 
 interface SegmentationCriteria {
     totalSpending?: number;

@@ -1,13 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
 
-import connectDB from './config/dbConfig.ts'; 
-import customerRoutes from './routes/customer.routes.ts';
-import orderRoutes from './routes/order.routes.ts';
-import subscribeToCustomerEvents from './api/subscribers/customerSubscriber.ts';
-import subscribeToOrderEvents from './api/subscribers/orderSubscriber.ts';
-import segmentRoutes from './routes/segment.routes.ts';
-import campaignRoutes from './routes/campaign.routes.ts';
+import connectDB from './src/config/dbConfig.ts'; 
+import customerRoutes from './src/routes/customer.routes.ts';
+import orderRoutes from './src/routes/order.routes.ts';
+import subscribeToCustomerEvents from './src/api/subscribers/customerSubscriber.ts';
+import subscribeToOrderEvents from './src/api/subscribers/orderSubscriber.ts';
+import segmentRoutes from './src/routes/segment.routes.ts';
+import campaignRoutes from './src/routes/campaign.routes.ts';
 
 dotenv.config();
 
