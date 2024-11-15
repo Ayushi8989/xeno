@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 import connectDB from './src/config/dbConfig.ts'; 
 import customerRoutes from './src/routes/customer.routes.ts';
@@ -13,6 +14,12 @@ import subscribeToSegmentEvents from './src/api/subscribers/segmentSubscriber.ts
 dotenv.config();
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:5001', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 // Middleware
 app.use(express.json()); // For parsing JSON requests

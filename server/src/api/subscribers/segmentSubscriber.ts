@@ -4,9 +4,15 @@ import Segment from '../../models/segment.model.ts';
 import { buildQuery } from '../../helper/query.ts';
 import { subscriberClient } from '../../config/redisClient.ts';
 
+let isSubscribed = false;
+
 const subscribeToSegmentEvents = async () => {
+    if (isSubscribed) {
+        console.log("Already subscribed to segment events.");
+        return;
+    }
+    isSubscribed = true;
     try {
-        //TODO: fix : the event is called twice
         await subscriberClient.subscribe('segment.added', async (message: string) => {
             const segmentData = JSON.parse(message);
 
