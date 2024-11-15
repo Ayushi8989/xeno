@@ -8,6 +8,7 @@ import subscribeToCustomerEvents from './src/api/subscribers/customerSubscriber.
 import subscribeToOrderEvents from './src/api/subscribers/orderSubscriber.ts';
 import segmentRoutes from './src/routes/segment.routes.ts';
 import campaignRoutes from './src/routes/campaign.routes.ts';
+import subscribeToSegmentEvents from './src/api/subscribers/segmentSubscriber.ts';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ connectDB();
 
 subscribeToCustomerEvents();
 subscribeToOrderEvents();
+subscribeToSegmentEvents();
 
 // Define routes
 app.use(customerRoutes); 

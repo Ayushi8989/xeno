@@ -1,50 +1,94 @@
-// import Customer from '../../app/models/customer.model.ts';  
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Order from '../models/order.model.ts';
 
-interface SegmentationCriteria {
-    totalSpending?: number;
-    visits?: number;
-    lastVisit?: number;
-}
+const operatorMap = {
+    ">=": "$gte",
+    "<=": "$lte",
+    ">": "$gt",
+    "<": "$lt",
+    "=": "$eq",
+    "!=": "$ne",
+};
+type OperatorKeys = keyof typeof operatorMap;
 
-export const buildQuery = async (criteria: SegmentationCriteria) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: any = {};
+export const buildQuery = async (
+    totalSpending: any,
+    totalSpendingOperator: OperatorKeys,
+    visits: any,
+    visitOperator:
+        OperatorKeys,
+    logic: string
+) => {
 
-    if (criteria.totalSpending) {
+    let amountQuery = {};
+    let visitsQuery = {};
+
+    // Build the aggregation query for amount
+    if (totalSpendingOperator) {
         const aggregateQuery = [
             {
                 $group: {
                     _id: "$customerId",
-                    totalAmount: { $sum: "$totalAmount" }
+                    totalAmount: { $sum: "$totalAmount" },
+                },
+            },
+            {
+                $match: {
+                    totalAmount: { [operatorMap[totalSpendingOperator]]: totalSpending },
+                },
+            },
+        ];
+
+        try {
+            const aggregatedResults = await Order.aggregate(aggregateQuery).exec();
+            const eligibleCustomerIds = aggregatedResults.map((result: { _id: string }) => result._id);
+
+            amountQuery = eligibleCustomerIds.length
+                ? { _id: { $in: eligibleCustomerIds } }
+                : { _id: { $in: [] } };
+        } catch (error) {
+            console.error("Error in aggregation for amount:", error);
+        }
+    }
+
+    // Build the visits query
+    if (visits && visitOperator) {
+
+        const visAggregateQuery = [
+            {
+                $group: {
+                    _id: "$customerId",
+                    orderCount: { $sum: 1 }
                 }
             },
             {
                 $match: {
-                    totalAmount: { $gt: criteria.totalSpending }
-                }
+                    orderCount: { [operatorMap[visitOperator]]: visits },
+                },
+
             }
-        ];
+        ]
 
-        const aggregatedResults = await Order.aggregate(aggregateQuery).exec();
-        const eligibleCustomerIds = aggregatedResults.map((result: { _id: string }) => result._id);
+        try {
+            const aggregatedResults = await Order.aggregate(visAggregateQuery).exec();
+            const eligibleCustomerIds = aggregatedResults.map((result: { _id: string }) => result._id);
 
-        if (eligibleCustomerIds.length > 0) {
-            query._id = { $in: eligibleCustomerIds };
-        } else {
-            query._id = { $in: [] };
+            visitsQuery = eligibleCustomerIds.length
+                ? { _id: { $in: eligibleCustomerIds } }
+                : { _id: { $in: [] } };
+        } catch (error) {
+            console.error("Error in aggregation for visits:", error);
         }
     }
 
-    // how the visits are recorded ideally?
-    if (criteria.visits) {
-        query.visits = { $lte: criteria.visits };
+    // Combine queries based on logic
+    let combinedQuery = {};
+    if (logic && logic.toUpperCase() === "OR") {
+        combinedQuery = { $or: [amountQuery, visitsQuery] };
+    } else {
+        // Default to AND logic
+        combinedQuery = { ...amountQuery, ...visitsQuery };
     }
 
-    if (criteria.lastVisit) {
-        const lastVisitDate = new Date(Date.now() - criteria.lastVisit * 24 * 60 * 60 * 1000);
-        query.lastVisit = { $lt: lastVisitDate };
-    }
-
-    return query;
+    return combinedQuery;
 };

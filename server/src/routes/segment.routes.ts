@@ -4,8 +4,8 @@ import { createSegment } from "../api/segments/createSegment.ts";
 
 const router = express.Router();
 
-router.post('/segments/preview', previewSegment);
 router.post('/segments/create', createSegment);
+router.post('/segments/preview', previewSegment);
 
 
 export default router;

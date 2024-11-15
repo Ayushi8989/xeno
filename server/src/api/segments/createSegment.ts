@@ -4,16 +4,15 @@ import { publisherClient } from '../../config/redisClient.ts';
 // Create segment
 export const createSegment = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, criteria } = req.body;
+        const { name, totalSpending, totalSpendingOperator, visits, visitOperator, logic} = req.body;
 
-        if (!name || !criteria) {
-            res.status(400).json({ message: 'Segment name and criteria are required' });
+        if (!name || !totalSpending || !totalSpendingOperator || !visits || !visitOperator || !logic) {
+            res.status(400).json({ message: 'All fields are required' });
             return;
         }
 
         try {
-            // Publish the segment creation event to Redis
-            await publisherClient.publish('segment.added', JSON.stringify({ name, criteria }));
+            await publisherClient.publish('segment.added', JSON.stringify({ name, totalSpending, totalSpendingOperator, visits, visitOperator, logic}));
             console.log('Published segment.added event');
             res.status(201).json({
                 message: 'Segment published successfully',

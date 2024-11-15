@@ -3,23 +3,35 @@ import mongoose, { Schema } from 'mongoose';
 const SegmentSchema: Schema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
-    criteria: {
-        type: Object,
-        required: true
+    totalSpending: {
+        type: Number,
+        required: true,
+    },
+    totalSpendingOperator: {
+        type: String,
+        required: true,
+        enum: ['>=', '<=', '=', '>', '<'], 
+    },
+    visits: {
+        type: Number,
+        required: true,
+    },
+    visitOperator: {
+        type: String,
+        required: true,
+        enum: ['>=', '<=', '=', '>', '<'], 
     },
     customerIds: [
         {
-            customer: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Customer'
-            },
-        }
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Customer',
+        },
     ],
     audienceSize: {
         type: Number,
-        required: true
+        required: true,
     },
 });
 

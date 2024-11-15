@@ -6,14 +6,14 @@ import { subscriberClient } from '../../config/redisClient.ts';
 
 const subscribeToSegmentEvents = async () => {
     try {
+        //TODO: fix : the event is called twice
         await subscriberClient.subscribe('segment.added', async (message: string) => {
             const segmentData = JSON.parse(message);
-            console.log('Received new segment event:', segmentData);
 
             try {
-                const { name, criteria } = segmentData;
+                const { name, totalSpending, totalSpendingOperator, visits, visitOperator, logic } = segmentData;
 
-                const query = await buildQuery(criteria);
+                const query = await buildQuery(totalSpending, totalSpendingOperator, visits, visitOperator, logic);
 
                 const audienceSize = await Customer.countDocuments(query);
 
@@ -22,15 +22,15 @@ const subscribeToSegmentEvents = async () => {
 
                 const newSegment = new Segment({
                     name,
-                    criteria,
+                    totalSpending,
+                    totalSpendingOperator,
+                    visits,
+                    visitOperator,
                     customerIds,
                     audienceSize,
                 });
 
                 await newSegment.save();
-
-                const newsegment = new Segment(segmentData);
-                await newsegment.save();
 
                 console.log('segment saved to database');
             } catch (error) {
