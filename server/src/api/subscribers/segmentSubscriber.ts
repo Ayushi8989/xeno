@@ -29,7 +29,7 @@ const subscribeToSegmentEvents = async () => {
                 const customerIds = customers.map(customer => customer._id);
 
                 console.log(20, customerIds, audienceSize);
-                
+
                 const newSegment = new Segment({
                     name,
                     totalSpending,
@@ -45,10 +45,11 @@ const subscribeToSegmentEvents = async () => {
                 await Promise.all(
                     customers.map(async (customer) => {
                         const log = new CommunicationLog({
-                            customerIds: [customer._id], 
+                            customerId: customer._id,
                             segmentId: savedSegment._id,
                             audienceSize: audienceSize,
-                            status: 'NOT SENT',
+                            status: 'SENT',
+                            message: 'You have been added!'
                         });
 
                         await log.save();

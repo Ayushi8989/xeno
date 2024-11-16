@@ -20,3 +20,20 @@ export const getCommunicationLogbyId = async (req: Request, res: Response): Prom
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+export const getCommunicationLogs = async (req: Request, res: Response): Promise<void> => {
+    try {
+        
+        const log = await CommunicationLog.find();
+        
+        if (!log) {
+            res.status(404).json({ message: 'Log not found' });
+            return;
+        }
+
+        res.status(200).json(log);
+    } catch (error) {
+        console.error('Error in getCommunicationLogs controller:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};

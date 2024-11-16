@@ -1,4 +1,3 @@
-/* General container styling */
 .audience-creator {
     max-width: 600px;
     margin: 50px auto;
@@ -17,7 +16,6 @@
     margin-bottom: 20px;
   }
   
-  /* Form group styling */
   .audience-creator .form-group {
     margin-bottom: 20px;
   }
@@ -30,7 +28,6 @@
     margin-bottom: 8px;
   }
   
-  /* Input container for side-by-side alignment */
   .input-container {
     display: flex;
     gap: 10px;
@@ -41,7 +38,6 @@
     flex: 1;
   }
   
-  /* Input fields styling */
   .audience-creator input[type="text"],
   .audience-creator input[type="number"],
   .audience-creator select {
@@ -61,7 +57,6 @@
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
   }
   
-  /* Button styling */
   .audience-creator button {
     display: block;
     width: 100%;
@@ -80,8 +75,7 @@
     background-color: #0056b3;
   }
   
-  /* Responsive Design */
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     .audience-creator {
       padding: 15px;
     }
@@ -97,5 +91,5 @@
     .input-container {
       flex-direction: column;
     }
-  }
+  } */
   

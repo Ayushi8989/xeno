@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
+
+import Segment from '../../models/segment.model.ts';
 import Customer from '../../models/customer.model.ts';
 import CommunicationLog from '../../models/communicationlog.model.ts';
+
 import { subscriberClient } from '../../config/redisClient.ts';
 import { handleDeliveryReceipt } from '../campaign/deliveryReceipt.ts';
 
@@ -17,31 +20,38 @@ export const subscribeToMessageEvents = async () => {
             console.log('Received message.added event');
 
             try {
-                const { communicationlogId, customerIds, message: templateMessage } = JSON.parse(message);
+                const { segmentId, message: templateMessage } = JSON.parse(message);
 
-                if (!communicationlogId || !customerIds || !Array.isArray(customerIds) || !templateMessage) {
+                if (!segmentId || !templateMessage) {
                     throw new Error('Invalid message data. Ensure communicationId, customerIds and templateMessage are provided.');
                 }
 
-                console.log(21, communicationlogId, customerIds, message)
+                const segment = await Segment.findById(segmentId);
 
-                const customers = await Customer.find({ _id: { $in: customerIds } });
+                const customerIds = segment?.customerIds;
 
-                for (const customer of customers) {
-                    const personalizedMessage = templateMessage.replace('[name]', customer.name);
-                    
-                    const logEntry = await CommunicationLog.findOneAndUpdate(
-                        { _id: communicationlogId},
-                        { $set: { message: personalizedMessage, status: 'PENDING' } },
-                        { new: true, upsert: false } 
+                if (!Array.isArray(customerIds)) {
+                    console.error('Invalid customerIds format. Expected an array of strings:', { customerIds });
+                    return;
+                }
+
+                for (const id of customerIds) {
+
+                    const customer = await Customer.findById(id);
+                    const personalizedMessage = templateMessage.replace('[name]', customer!.name);
+
+                    const logEntry = new CommunicationLog(
+                        {
+                            customerId: id,
+                            message: personalizedMessage,
+                            segmentId,
+                            status: 'PENDING'
+                        }
                     );
 
-                    if (!logEntry) {
-                        console.warn(`CommunicationLog entry not found for customerId: ${customer._id}`);
-                        continue;
-                    } 
+                    await logEntry.save();
 
-                    await triggerDeliveryReceipt(logEntry._id); 
+                    await triggerDeliveryReceipt(logEntry._id);
                 }
 
                 console.log('Messages processed for audience.');

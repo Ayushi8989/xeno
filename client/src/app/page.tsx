@@ -4,7 +4,8 @@ import PastCampaigns from "./pages/pastCampaigns/pastCampaign";
 export default function Home() {
   return (
     <div>
-      <PastCampaigns/>
+      {/* <AudienceCreator/> */}
+      <PastCampaigns />
     </div>
   );
 }
