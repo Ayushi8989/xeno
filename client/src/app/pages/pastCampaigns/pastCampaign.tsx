@@ -8,7 +8,7 @@ interface Campaign {
   name: string;
   message: string;
   segmentId: string;
-  createdAt: string; 
+  createdAt: string;
 }
 
 const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -17,6 +17,7 @@ const PastCampaigns = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchPastCampaigns = async () => {
@@ -33,6 +34,26 @@ const PastCampaigns = () => {
 
     fetchPastCampaigns();
   }, []);
+
+  const handleSubmit = async () => {
+    try {
+      const communicationlogId = "67387abb999d67f46065079a";
+      const logResponse = await axios.get(`${apiUrl}/communicationLog/${communicationlogId}`);
+
+      const { customerIds } = logResponse.data;
+
+      const response = await axios.post(`${apiUrl}/sendMessage`, {
+        communicationlogId,
+        customerIds,
+        message,
+      });
+      alert('Message sent successfully!');
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Error sending message.');
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -65,6 +86,16 @@ const PastCampaigns = () => {
           ))}
         </tbody>
       </table>
+      <div>
+        <h1>Personalized messages for the selected audience</h1>
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Enter message here"
+        />
+        <button onClick={handleSubmit}>Send message</button>
+      </div>
     </div>
   );
 };

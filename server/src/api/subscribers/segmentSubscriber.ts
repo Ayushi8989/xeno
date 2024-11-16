@@ -25,8 +25,11 @@ const subscribeToSegmentEvents = async () => {
                 const audienceSize = await Customer.countDocuments(query);
 
                 const customers = await Customer.find(query);
+
                 const customerIds = customers.map(customer => customer._id);
 
+                console.log(20, customerIds, audienceSize);
+                
                 const newSegment = new Segment({
                     name,
                     totalSpending,
@@ -42,7 +45,7 @@ const subscribeToSegmentEvents = async () => {
                 await Promise.all(
                     customers.map(async (customer) => {
                         const log = new CommunicationLog({
-                            customerId: customer._id,
+                            customerIds: [customer._id], 
                             segmentId: savedSegment._id,
                             audienceSize: audienceSize,
                             status: 'NOT SENT',
@@ -52,7 +55,7 @@ const subscribeToSegmentEvents = async () => {
                     })
                 );
 
-                console.log('segment and associated communication log saved to database');
+                console.log('Segment and associated communication log saved to database');
             } catch (error) {
                 console.error('Error saving segment to database:', error);
             }
