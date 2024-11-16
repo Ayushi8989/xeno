@@ -18,7 +18,7 @@ const subscribeToSegmentEvents = async () => {
             const segmentData = JSON.parse(message);
 
             try {
-                const { name, totalSpending, totalSpendingOperator, visits, visitOperator, logic } = segmentData;
+                const { name, totalSpending, totalSpendingOperator, visits, visitOperator, logic, segmentId } = segmentData;
 
                 const query = await buildQuery(totalSpending, totalSpendingOperator, visits, visitOperator, logic);
 
@@ -40,13 +40,21 @@ const subscribeToSegmentEvents = async () => {
                     audienceSize,
                 });
 
-                const savedSegment = await newSegment.save();
+                console.log(5345, segmentId)
+
+                const savedSegment = segmentId ? await Segment.findById(segmentId) : await newSegment.save();
+                if (savedSegment) {
+                    savedSegment.customerIds = customerIds;
+                    await savedSegment.save();
+                }
+
+                console.log("Segment saved:", savedSegment, "Segment ID:", savedSegment?._id);
 
                 await Promise.all(
                     customers.map(async (customer) => {
                         const log = new CommunicationLog({
                             customerId: customer._id,
-                            segmentId: savedSegment._id,
+                            segmentId: savedSegment?._id,
                             audienceSize: audienceSize,
                             status: 'SENT',
                             message: 'You have been added!'
@@ -55,6 +63,7 @@ const subscribeToSegmentEvents = async () => {
                         await log.save();
                     })
                 );
+
 
                 console.log('Segment and associated communication log saved to database');
             } catch (error) {

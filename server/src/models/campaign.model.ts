@@ -14,6 +14,18 @@ const CampaignSchema = new mongoose.Schema({
         ref: 'Segment',
         required: true
     },
+    segmentName:{
+        type: String,
+    },
+    audienceSize: {
+        type: Number
+    },
+    numberSent: {
+        type: Number
+    },
+    numberFailed: {
+        type: Number
+    }
 }, { timestamps: true });
 
 export default mongoose.model('Campaign', CampaignSchema);

@@ -1,11 +1,10 @@
-// import AudienceCreator from "./pages/audienceCreator";
-import PastCampaigns from "./pages/pastCampaigns/pastCampaign";
+import React from 'react';
+import App from './App';
 
-export default function Home() {
+export default function Page() {
   return (
-    <div>
-      {/* <AudienceCreator/> */}
-      <PastCampaigns />
-    </div>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
   );
 }

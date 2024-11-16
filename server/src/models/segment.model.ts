@@ -31,7 +31,7 @@ const SegmentSchema: Schema = new Schema({
     ],
     audienceSize: {
         type: Number,
-        required: true,
+        // required: true,
     },
 });
 

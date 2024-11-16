@@ -2,13 +2,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./pastCampaign.css";
+import { useSearchParams } from "react-router-dom";
 
 interface Campaign {
   _id: string;
   name: string;
   message: string;
-  segmentId: string;
-  audienceSize: number; 
+  segmentName: string,
+  audienceSize: number;
+  numberSent: number,
+  numberFailed: number,
   createdAt: string;
 }
 
@@ -28,6 +31,9 @@ const PastCampaigns: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [communicationLogs, setCommunicationLogs] = useState<CommunicationLog[]>([]);
+
+  const [searchParams] = useSearchParams();
+  const segmentId = searchParams.get("id");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,13 +58,13 @@ const PastCampaigns: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      const segmentId = "6738e57dec597b7523501b13"; 
-
       const response = await axios.post(`${apiUrl}/sendMessage`, {
         segmentId,
         message,
       });
 
+      const logResponse = await axios.get(`${apiUrl}/communicationLogs`);
+      setCommunicationLogs(logResponse.data);
       console.log(54, response.data);
       alert("Message sent successfully!");
     } catch (error) {
@@ -66,19 +72,6 @@ const PastCampaigns: React.FC = () => {
       alert("Error sending message.");
     }
   };
-
-  const fetchAudienceSize = async (segmentId: string): Promise<number | null> => {
-    try {
-      const response = await axios.post(`${apiUrl}/segments/${segmentId}`, {});
-      const audienceSize = response.data.audienceSize;
-      return audienceSize; 
-    } catch (error) {
-      console.error("Error fetching segment audience size:", error);
-      return null;
-    }
-  };
-  
-console.log(fetchAudienceSize)
 
   if (loading) return <div>Loading...</div>;
 
@@ -94,6 +87,8 @@ console.log(fetchAudienceSize)
             <th>Message</th>
             <th>Segment Name</th>
             <th>Audience Size</th>
+            <th>Number Sent</th>
+            <th>Number Failed</th>
             <th>Created At</th>
           </tr>
         </thead>
@@ -102,8 +97,10 @@ console.log(fetchAudienceSize)
             <tr key={campaign._id}>
               <td>{campaign.name}</td>
               <td>{campaign.message}</td>
-              <td>{campaign.segmentId}</td>
-              <td>{campaign.audienceSize || "N/A"}</td>
+              <td>{campaign.segmentName}</td>
+              <td>{campaign.audienceSize}</td>
+              <td>{campaign.numberSent}</td>
+              <td>{campaign.numberFailed}</td>
               <td>{new Date(campaign.createdAt).toLocaleString()}</td>
             </tr>
           ))}

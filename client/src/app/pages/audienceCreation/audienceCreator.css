@@ -1,0 +1,81 @@
+.audience-creator {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.audience-creator h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.audience-creator .form-group {
+  margin-bottom: 20px;
+}
+
+.audience-creator label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+  display: block;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px; 
+}
+
+.input-fields {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.audience-creator input[type="text"],
+.audience-creator input[type="number"],
+.audience-creator select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  box-sizing: border-box;
+  width: 100%; /* Ensure full-width by default */
+}
+
+.audience-creator input[type="text"]:focus,
+.audience-creator input[type="number"]:focus,
+.audience-creator select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+
+.audience-creator button {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #5c6bc0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s;
+  margin-top: 15px;
+}
+
+.audience-creator button:hover {
+  background-color: #5c70e0;
+}
+
+

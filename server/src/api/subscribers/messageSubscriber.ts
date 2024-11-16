@@ -26,6 +26,8 @@ export const subscribeToMessageEvents = async () => {
                     throw new Error('Invalid message data. Ensure communicationId, customerIds and templateMessage are provided.');
                 }
 
+                console.log(25, segmentId, message)
+                
                 const segment = await Segment.findById(segmentId);
 
                 const customerIds = segment?.customerIds;
@@ -34,6 +36,8 @@ export const subscribeToMessageEvents = async () => {
                     console.error('Invalid customerIds format. Expected an array of strings:', { customerIds });
                     return;
                 }
+
+                console.log(26, customerIds)
 
                 for (const id of customerIds) {
 
@@ -48,6 +52,8 @@ export const subscribeToMessageEvents = async () => {
                             status: 'PENDING'
                         }
                     );
+
+                    console.log(27, logEntry)
 
                     await logEntry.save();
 
