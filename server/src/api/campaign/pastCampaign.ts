@@ -1,20 +1,13 @@
 import { Request, Response } from 'express';
-import Segment from '../../models/segment.model.ts';
 import Campaign from '../../models/campaign.model.ts';
 
-// get all the past campaigns by segment id
+// get all the past campaigns
 export const pastCampaign = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = req.params;
+        // const currentDate = new Date();
 
-        const findSegment = await Segment.findById(id);
-        if (!findSegment) {
-            res.status(404).json({ message: 'Segment not found' });
-            return;
-        }
-
-        const campaigns = await Campaign.find({ segmentId: id })
-            .sort({ createdAt: -1 })  // Order by the most recent
+        const campaigns = await Campaign.find({})
+            .sort({ createdAt: -1 })  // Order by the most recent creation date
             .exec();
 
         res.status(200).json({ campaigns });
