@@ -7,16 +7,19 @@ const CommunicationLogSchema = new Schema({
     },
     message: { 
         type: String, 
-        required: true 
     },
     segmentId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Segment',
         required: true
     },
+    audienceSize: {
+        type: Number,
+        required: true,
+    },
     status: { 
         type: String, 
-        enum: ['PENDING', 'SENT', 'FAILED'], default: 'PENDING' 
+        enum: ['PENDING', 'SENT', 'FAILED', 'NOT SENT'], default: 'NOT SENT' 
     },
 }, { timestamps: true });
 

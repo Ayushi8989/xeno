@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Customer from '../../models/customer.model.ts';
 import CommunicationLog from '../../models/communicationlog.model.ts';
 import { subscriberClient } from '../../config/redisClient.ts';
 import { handleDeliveryReceipt } from '../campaign/deliveryReceipt.ts';
@@ -16,17 +17,29 @@ export const subscribeToMessageEvents = async () => {
             console.log('Received message.added event');
 
             try {
-                const audience = JSON.parse(message); 
+                const { communicationlogId, customerIds, message: templateMessage } = JSON.parse(message);
 
-                for (const customer of audience) {
-                    const personalizedMessage = `Hi ${customer.name}, here’s 10% off on your next order!`;
+                if (!communicationlogId || !customerIds || !Array.isArray(customerIds) || !templateMessage) {
+                    throw new Error('Invalid message data. Ensure communicationId, customerIds and templateMessage are provided.');
+                }
 
-                    const logEntry = new CommunicationLog({
-                        customerId: customer._id,
-                        message: personalizedMessage
-                    });
+                console.log(21, communicationlogId, customerIds, message)
 
-                    await logEntry.save(); 
+                const customers = await Customer.find({ _id: { $in: customerIds } });
+
+                for (const customer of customers) {
+                    const personalizedMessage = templateMessage.replace('[name]', customer.name);
+                    
+                    const logEntry = await CommunicationLog.findOneAndUpdate(
+                        { _id: communicationlogId},
+                        { $set: { message: personalizedMessage, status: 'PENDING' } },
+                        { new: true, upsert: false } 
+                    );
+
+                    if (!logEntry) {
+                        console.warn(`CommunicationLog entry not found for customerId: ${customer._id}`);
+                        continue;
+                    } 
 
                     await triggerDeliveryReceipt(logEntry._id); 
                 }

@@ -1,5 +1,6 @@
 import Customer from '../../models/customer.model.ts';
 import Segment from '../../models/segment.model.ts';
+import CommunicationLog from '../../models/communicationlog.model.ts';
 
 import { buildQuery } from '../../helper/query.ts';
 import { subscriberClient } from '../../config/redisClient.ts';
@@ -36,9 +37,22 @@ const subscribeToSegmentEvents = async () => {
                     audienceSize,
                 });
 
-                await newSegment.save();
+                const savedSegment = await newSegment.save();
 
-                console.log('segment saved to database');
+                await Promise.all(
+                    customers.map(async (customer) => {
+                        const log = new CommunicationLog({
+                            customerId: customer._id,
+                            segmentId: savedSegment._id,
+                            audienceSize: audienceSize,
+                            status: 'NOT SENT',
+                        });
+
+                        await log.save();
+                    })
+                );
+
+                console.log('segment and associated communication log saved to database');
             } catch (error) {
                 console.error('Error saving segment to database:', error);
             }
