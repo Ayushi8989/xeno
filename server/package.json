@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "node --loader ts-node/esm --no-warnings server.ts"
+    "dev": "node --loader ts-node/esm --no-warnings server.ts",
+    "build": "next build"
   },
   "dependencies": {
     "axios": "^1.7.7",
@@ -19,6 +20,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^20.17.6",
+    "@types/react": "18.3.12",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "typescript": "^5.6.3"

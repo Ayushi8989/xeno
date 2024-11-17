@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./pastCampaign.css";
 
-// import { useSegment } from "../context/SegmentContext";
+import { useSegment } from "../context/SegmentContext";
 
 interface Campaign {
     _id: string;
@@ -27,23 +27,25 @@ interface CommunicationLog {
 const apiUrl = process.env.API_URL || "http://localhost:5000";
 
 const PastCampaigns: React.FC = () => {
-    //   const { createdSegmentId } = useSegment();
+      const { createdSegmentId } = useSegment();
+      const [segmentId, setSegmId] = useState("")
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState("");
     const [communicationLogs, setCommunicationLogs] = useState<CommunicationLog[]>([]);
 
-    // console.log(13245678, createdSegmentId)
+    console.log(13245678, createdSegmentId)
     useEffect(() => {
-        // if (!createdSegmentId) return;
+        if (!createdSegmentId) return;
         const fetchData = async () => {
             try {
                 const [campaignResponse, logResponse] = await Promise.all([
                     axios.get(`${apiUrl}/pastcampaign`),
                     axios.get(`${apiUrl}/communicationLogs`),
                 ]);
-
+                
+                setSegmId(createdSegmentId);
                 setCampaigns(campaignResponse.data.campaigns);
                 setCommunicationLogs(logResponse.data);
             } catch (err) {
@@ -56,12 +58,12 @@ const PastCampaigns: React.FC = () => {
 
         console.log(503)
         fetchData();
-    }, []);
+    }, [createdSegmentId]);
 
     const handleSubmit = async () => {
         try {
             const response = await axios.post(`${apiUrl}/sendMessage`, {
-                segmentId: "67391ce0ade71ccdb3376c76",
+                segmentId: segmentId,
                 message,
             });
 

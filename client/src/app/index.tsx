@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import { useSegment } from "../../context/SegmentContext"; 
+import { useSegment } from "./context/SegmentContext"; 
 import "./audienceCreator.css";
 import { useRouter } from "next/navigation"; 
 

@@ -1,13 +1,5 @@
-import { AppProps } from "next/app";
-import { SegmentProvider } from "./context/SegmentContext"; // Adjust path if necessary
-import AudienceCreator from "./pages/audienceCreation";
+import AudienceCreator from "./index";
 
-function MyApp({pageProps }: AppProps) {
-  return (
-    <SegmentProvider>
-      <AudienceCreator {...pageProps} />
-    </SegmentProvider>
-  );
+export default function Home() {
+  return <AudienceCreator />;
 }
-
-export default MyApp;
