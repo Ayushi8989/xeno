@@ -39,8 +39,13 @@ app.use(orderRoutes);
 app.use(segmentRoutes);
 app.use(campaignRoutes);
 
+
+app.get("/", (req, res) =>{res.send("xeno express server")});
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+export { app }
