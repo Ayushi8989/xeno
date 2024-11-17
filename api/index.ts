@@ -2,15 +2,15 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import serverless from 'serverless-http'; 
-import connectDB from '../config/dbConfig.ts';
-import customerRoutes from '../routes/customer.routes.ts';
-import orderRoutes from '../routes/order.routes.ts';
-import subscribeToCustomerEvents from './subscribers/customerSubscriber.ts';
-import subscribeToOrderEvents from './subscribers/orderSubscriber.ts';
-import segmentRoutes from '../routes/segment.routes.ts';
-import campaignRoutes from '../routes/campaign.routes.ts';
-import subscribeToSegmentEvents from './subscribers/segmentSubscriber.ts';
-import { subscribeToMessageEvents } from './subscribers/messageSubscriber.ts';
+import connectDB from '../server/src/config/dbConfig.ts';
+import customerRoutes from '../server/src/routes/customer.routes.ts';
+import orderRoutes from '../server/src/routes/order.routes.ts';
+import subscribeToCustomerEvents from '../server/src/api/subscribers/customerSubscriber.ts';
+import subscribeToOrderEvents from '../server/src/api/subscribers/orderSubscriber.ts';
+import segmentRoutes from '../server/src/routes/segment.routes.ts';
+import campaignRoutes from '../server/src/routes/campaign.routes.ts';
+import subscribeToSegmentEvents from '../server/src/api/subscribers/segmentSubscriber.ts';
+import { subscribeToMessageEvents } from '../server/src/api/subscribers/messageSubscriber.ts';
 
 dotenv.config();
 
