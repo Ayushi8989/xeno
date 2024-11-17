@@ -24,7 +24,7 @@ interface CommunicationLog {
     createdAt: string;
 }
 
-const apiUrl = process.env.API_URL || "http://localhost:5000";
+const apiUrl = process.env.API_URL;
 
 const PastCampaigns: React.FC = () => {
       const { createdSegmentId } = useSegment();

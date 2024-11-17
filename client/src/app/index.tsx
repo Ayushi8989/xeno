@@ -5,7 +5,7 @@ import { useSegment } from "./context/SegmentContext";
 import "./audienceCreator.css";
 import { useRouter } from "next/navigation"; 
 
-const apiUrl = process.env.API_URL || "http://localhost:5000";
+const apiUrl = process.env.API_URL;
 
 const AudienceCreator = () => {
   const { setCreatedSegmentId } = useSegment(); 
