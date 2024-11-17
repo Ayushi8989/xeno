@@ -24,7 +24,6 @@ interface CommunicationLog {
     createdAt: string;
 }
 
-const apiUrl = process.env.API_URL;
 
 const PastCampaigns: React.FC = () => {
       const { createdSegmentId } = useSegment();
@@ -41,8 +40,8 @@ const PastCampaigns: React.FC = () => {
         const fetchData = async () => {
             try {
                 const [campaignResponse, logResponse] = await Promise.all([
-                    axios.get(`${apiUrl}/pastcampaign`),
-                    axios.get(`${apiUrl}/communicationLogs`),
+                    axios.get(`https://aux.server.lera.cloud/pastcampaign`),
+                    axios.get(`https://aux.server.lera.cloud/communicationLogs`),
                 ]);
                 
                 setSegmId(createdSegmentId);
@@ -62,12 +61,12 @@ const PastCampaigns: React.FC = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post(`${apiUrl}/sendMessage`, {
+            const response = await axios.post(`https://aux.server.lera.cloud/sendMessage`, {
                 segmentId: segmentId,
                 message,
             });
 
-            const logResponse = await axios.get(`${apiUrl}/communicationLogs`);
+            const logResponse = await axios.get(`https://aux.server.lera.cloud/communicationLogs`);
             setCommunicationLogs(logResponse.data);
             console.log(54, response.data);
             alert("Message sent successfully!");

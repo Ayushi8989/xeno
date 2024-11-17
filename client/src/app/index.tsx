@@ -5,8 +5,6 @@ import { useSegment } from "./context/SegmentContext";
 import "./audienceCreator.css";
 import { useRouter } from "next/navigation"; 
 
-const apiUrl = process.env.API_URL;
-
 const AudienceCreator = () => {
   const { setCreatedSegmentId } = useSegment(); 
   const [name, setName] = useState("");
@@ -23,7 +21,7 @@ const AudienceCreator = () => {
       const amountNumber = Number(amount);
       const visitsNumber = Number(visits);
 
-      const response = await axios.post(`${apiUrl}/segments/create`, {
+      const response = await axios.post(`https://aux.server.lera.cloud/segments/create`, {
         name,
         totalSpending: amountNumber,
         totalSpendingOperator: amountOperator,
