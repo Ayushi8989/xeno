@@ -39,4 +39,4 @@ app.use(orderRoutes);
 app.use(segmentRoutes);
 app.use(campaignRoutes);
 
-module.exports.handler = serverless(app); // Export as serverless function
+export const handler = serverless(app);// Export as serverless function
