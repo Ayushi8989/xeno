@@ -10,6 +10,7 @@ export const pastCampaign = async (req: Request, res: Response): Promise<void> =
             .sort({ createdAt: -1 })  // Order by the most recent creation date
             .exec();
 
+            console.log('past acmpaign fetching...')
         res.status(200).json({ campaigns });
     } catch (error) {
         console.error('Error fetching campaigns:', error);

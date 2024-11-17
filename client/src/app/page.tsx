@@ -1,10 +1,13 @@
-import React from 'react';
-import App from './App';
+import { AppProps } from "next/app";
+import { SegmentProvider } from "./context/SegmentContext"; // Adjust path if necessary
+import AudienceCreator from "./pages/audienceCreation";
 
-export default function Page() {
+function MyApp({pageProps }: AppProps) {
   return (
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <SegmentProvider>
+      <AudienceCreator {...pageProps} />
+    </SegmentProvider>
   );
 }
+
+export default MyApp;

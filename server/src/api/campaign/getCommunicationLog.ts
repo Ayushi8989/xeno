@@ -1,14 +1,14 @@
-import CommunicationLog from '../../models/communicationlog.model.ts'; 
+import CommunicationLog from '../../models/communicationlog.model.ts';
 
 import { Request, Response } from 'express';
 
 // To get details of communctionLog by id
 export const getCommunicationLogbyId = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = req.params;  
-        
+        const { id } = req.params;
+
         const log = await CommunicationLog.findById(id);
-        
+
         if (!log) {
             res.status(404).json({ message: 'Log not found' });
             return;
@@ -23,9 +23,10 @@ export const getCommunicationLogbyId = async (req: Request, res: Response): Prom
 
 export const getCommunicationLogs = async (req: Request, res: Response): Promise<void> => {
     try {
-        
-        const log = await CommunicationLog.find();
-        
+
+        const log = await CommunicationLog.find().sort({ createdAt: -1 })  // Order by the most recent creation date
+            .exec();
+
         if (!log) {
             res.status(404).json({ message: 'Log not found' });
             return;

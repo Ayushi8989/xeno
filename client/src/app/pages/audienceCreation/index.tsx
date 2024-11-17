@@ -1,19 +1,22 @@
 "use client";
-import { useState } from 'react';
-import axios from 'axios';
-import './audienceCreator.css';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import axios from "axios";
+import { useSegment } from "../../context/SegmentContext"; 
+import "./audienceCreator.css";
+import { useRouter } from "next/navigation"; 
 
-const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const apiUrl = process.env.API_URL || "http://localhost:5000";
 
 const AudienceCreator = () => {
-  const navigate = useNavigate();
-  const [name, setName] = useState('')
-  const [amount, setAmount] = useState('');
-  const [amountOperator, setAmountOperator] = useState('>=');
-  const [visits, setVisits] = useState('');
-  const [visitOperator, setVisitOperator] = useState('>=');
-  const [logic, setLogic] = useState('AND');
+  const { setCreatedSegmentId } = useSegment(); 
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [amountOperator, setAmountOperator] = useState(">=");
+  const [visits, setVisits] = useState("");
+  const [visitOperator, setVisitOperator] = useState(">=");
+  const [logic, setLogic] = useState("AND");
+
+  const router = useRouter();
 
   const handleSubmit = async () => {
     try {
@@ -29,12 +32,14 @@ const AudienceCreator = () => {
         logic,
       });
 
-      console.log(202, response.data)
       const createdSegmentId = response.data.segmentId;
-      console.log(203, createdSegmentId);
       alert("Segment created successfully!");
 
-      navigate(`/pastCampaign?id=${createdSegmentId}`);
+      // Set the createdSegmentId in context
+      setCreatedSegmentId(createdSegmentId);
+
+      router.push('/pastCampaign')
+
     } catch (error) {
       console.error("Error creating segment:", error);
       alert("Error creating segment.");
@@ -100,13 +105,9 @@ const AudienceCreator = () => {
         </div>
       </div>
 
-
       <div>
         <label>Logic:</label>
-        <select
-          value={logic}
-          onChange={(e) => setLogic(e.target.value)}
-        >
+        <select value={logic} onChange={(e) => setLogic(e.target.value)}>
           <option value="AND">AND</option>
           <option value="OR">OR</option>
         </select>

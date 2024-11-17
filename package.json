@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "la-la-la",
   "scripts": {
-    "start:server": "cd server && npm run dev",
+    "dev:server": "cd server && npm run dev",
     "build:client": "cd client && npm run build",
-    "start:client": "cd client && npm run start"
+    "dev:client": "cd client && npm run dev"
   },
   "author": "ayu",
   "devDependencies": {
