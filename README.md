@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# README for Promotional Email Sending Web Project
 
-## Getting Started
+## Overview
+This project is a **Promotional Email Sending Web Application** designed to send targeted promotional emails to customers based on specific segmentation criteria. It utilizes **Express.js** for the server-side framework and **Redis** for implementing a publish-subscribe (pub-sub) messaging system, ensuring efficient handling of email notifications.
 
-First, run the development server:
+## Features
+- **Segmented Email Campaigns**: Create customer segments based on specified criteria such as purchase history, and engagement levels.
+- **Real-time Notifications**: Leverage Redis pub-sub for real-time email sending logs.
+- **User-friendly Interface**: A web-based interface that allows users to easily manage email campaigns and customer segments.
+- **Scalable Architecture**: Built to handle a large number of emails and customers efficiently.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Technologies Used
+- **Express.js**: A web application framework for Node.js, used to build the server-side application.
+- **Redis**: An in-memory data structure store used for pub-sub messaging, allowing real-time communication between different parts of the application.
+- **Next.js with typescript**
+- **Nodemailer**: A module for Node.js to send emails easily.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
+To set up the project locally, follow these steps:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+   
+3. Set up Redis:
+   - Ensure Redis is installed and running on your machine. You can download it from [Redis.io](https://redis.io/download).
 
-## Learn More
+4. Configure environment variables:
+   - Create a `.env` file in the root directory and add your email service credentials and Redis configuration.
 
-To learn more about Next.js, take a look at the following resources:
+5. To run the client and server in development:
+   ```bash
+   npm run dev:client
+   npm run dev: server
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
+Contributions are welcome! Please submit a pull request or open an issue for any suggestions or improvements.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+For further inquiries or support, please contact the author via the provided email.
+![image](https://github.com/user-attachments/assets/dd3d51cf-003f-4c8b-b57b-0fd88b36b722)
+![image](https://github.com/user-attachments/assets/95621d77-755f-40f5-b4ef-a64dd7a47aad)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
