@@ -1,7 +1,7 @@
 # README for Promotional Email Sending Web Project
 
 ## Overview
-This project is a **Promotional Email Sending Web Application** designed to send targeted promotional emails to customers based on specific segmentation criteria. It utilizes **Express.js** for the server-side framework and **Redis** for implementing a publish-subscribe (pub-sub) messaging system, ensuring efficient handling of email notifications.
+This project is a **Promotional Email Sending Web Application** designed to send targeted promotional emails to customers based on specific segmentation criteria. It utilizes **Express.js** for the server-side framework and **Redis** for implementing a publish-subscribe (pub-sub) messaging system, ensuring efficient handling of email notifications. This project was an assignment from Xeno and was built within 5 days. 
 
 ## Features
 - **Segmented Email Campaigns**: Create customer segments based on specified criteria such as purchase history, and engagement levels.
@@ -37,14 +37,10 @@ To set up the project locally, follow these steps:
 
 5. To run the client and server in development:
    ```bash
-   npm run dev:client
+   npm run dev: client
    npm run dev: server
    ```
-
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any suggestions or improvements.
-
-For further inquiries or support, please contact the author via the provided email.
+   
 ![image](https://github.com/user-attachments/assets/dd3d51cf-003f-4c8b-b57b-0fd88b36b722)
 ![image](https://github.com/user-attachments/assets/95621d77-755f-40f5-b4ef-a64dd7a47aad)
 
